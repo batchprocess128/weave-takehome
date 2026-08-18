@@ -61,14 +61,14 @@ data/raw/              # fetched GitHub payloads (not required at runtime)
 
 GitHub Pages serves the committed `docs/` directory without a build step.
 
-After pushing the repository, open **Settings → Pages**, choose **Deploy from a branch**, then select `main` and `/docs`. Verify both the page and `data.json` in a logged-out browser before submitting.
+Pages publishes from `main:/docs`. Verify both the page and `data.json` in a logged-out browser before submitting.
 
 ## Validation
 
 - Dataset: 13,475 merged PRs and 969 relevant issues from 2026-05-20 through 2026-08-18.
 - Ranking: 106 inferred PostHog-affiliated contributors considered; 105 scored because one had no PR or review signal.
-- Evidence: every top-five profile includes authored PR, reviewed-PR, and (where present) issue links.
-- Sensitivity: Arthur leads outcomes and framing; the review-reach leader is Georges-Antoine Assi. Tom Owers ranks third in the combined model, fifth on outcomes and second on review reach. His 1,160 `stamphog`-labeled PRs are excluded from outcomes.
+- Evidence: every top-five profile includes authored PR links, plus reviewed-PR and issue links wherever those signals exist.
+- Sensitivity: Jake Sciotto leads outcomes; Arthur Moreira de Deus leads framing; Georges-Antoine Assi leads review reach. Tom Owers ranks fourth in the composite and second on review reach after 1,160 `stamphog`-labeled PRs are excluded from outcomes.
 - Reproducibility: `python3 scripts/analyze.py` regenerates `docs/data.json` deterministically from the cached raw inputs.
 
 **Data constraints we designed around:** ~13.5k merged PRs in 90 days; GitHub search caps at 1,000 hits per query and 30 req/min. Fetch slices dates into 4–5 day windows and sleeps on the rate limit.
@@ -79,7 +79,7 @@ After pushing the repository, open **Settings → Pages**, choose **Deploy from 
 - Pairing and AI-assisted PRs attribute to the author on the PR.
 - Affiliation is inferred from GitHub company, bio, login suffix, or public membership. Not an HR roster.
 - Review reach is `reviewed-by` search hits. We did not fetch review bodies or CHANGES_REQUESTED.
-- Issue-ref PRs are a text parser, not GitHub's linked-issue graph.
+- Issue-ref PRs use a text parser, not GitHub's linked-issue graph. A reference must immediately follow the closing keyword and resolve to the relevant issue census, preventing nearby prose references from being counted.
 - Conversation comments are search `comments`, not review-discussion depth.
 - Other PostHog repositories are excluded.
 - Submission also needs a coding-agent session export (reserved at the end).

@@ -31,13 +31,49 @@ CLOSE_HEAD = re.compile(
     re.I,
 )
 CLOSE_NUM = re.compile(
-    r"(?:https://github\.com/[\w.-]+/[\w.-]+/issues/|[\w.-]+/[\w.-]+#|#)(\d+)",
+    r"(?:\[(?:\*\*)?)?"
+    r"(?:https://github\.com/[\w.-]+/[\w.-]+/issues/|[\w.-]+/[\w.-]+#|#)(\d+)"
+    r"(?:\*\*)?(?:\]\([^)]+\))?",
     re.I,
 )
+CLOSE_SEP = re.compile(r"\s*(?:,\s*(?:and\s+)?|;\s*|\band\s+)", re.I)
 BUGGY_LABEL = re.compile(r"bug|regress|crash|secur|vulnerab|perf|incident|hotfix", re.I)
 STAMP_LABEL = re.compile(r"^stamphog$", re.I)
 LOGIN_AFFIL = re.compile(r"(-ph|-posthog)$", re.I)
 WEIGHTS = {"outcomes": 0.40, "review_reach": 0.35, "framing": 0.25}
+
+EDITORIAL_WHY = {
+    "arthurdedeus": (
+        "Owned customer-analytics accounts: notebooks, tagging, and calendar sync. "
+        "Also had the strongest problem-framing signal in the window."
+    ),
+    "fercgomes": (
+        "Shipped provisioning, authentication, navigation, and task-reliability work, "
+        "with 21 issue-linked landings."
+    ),
+    "jakesciotto": (
+        "Shipped warehouse-source and customer-analytics work, leading outcomes with "
+        "28 issue-linked landings while authoring 43 issues that closed."
+    ),
+    "Gilbert09": (
+        "Moved warehouse imports and data infrastructure while reviewing 437 merged PRs "
+        "across 57 authors. 1,160 stamphog PRs were excluded from outcomes."
+    ),
+    "pauldambra": (
+        "Improved AI tooling, interviews, and search reliability while reviewing 179 "
+        "merged PRs across 43 authors."
+    ),
+    "webjunkie": (
+        "Strengthened developer infrastructure: isolation checks, API startup performance, "
+        "and adaptive CI test sharding."
+    ),
+    "andrewm4894": (
+        "Built Signals research and scout tooling while reviewing 344 merged PRs "
+        "across 41 authors."
+    ),
+}
+
+EDITORIAL_NAMES = {"jakesciotto": "Jake Sciotto"}
 
 FORMULAS = {
     "impact": (
@@ -71,8 +107,9 @@ FORMULAS = {
         "A PR is an issue-ref PR if title+body contains a GitHub closing keyword "
         "(close/closes/closed, fix/fixes/fixed, resolve/resolves/resolved) followed "
         "by #N, owner/repo#N, or a github.com/.../issues/N URL. "
-        "'implements #N' does not count. This is a parser over PR text, not GitHub's "
-        "linked-issue graph."
+        "The referenced number must also appear in the relevant issue census for the "
+        "window. 'implements #N' does not count. This is a parser over PR text, not "
+        "GitHub's linked-issue graph."
     ),
     "high_comment": (
         "high_comment_prs = staff-authored, non-stamphog PRs whose conversation "
@@ -123,17 +160,30 @@ def in_window(iso: str | None) -> bool:
     return bool(d and WINDOW_START <= d <= WINDOW_END)
 
 
-def issue_refs(pr: dict) -> list[int]:
+def issue_refs(pr: dict, valid_issue_numbers: set[int] | None = None) -> list[int]:
     text = f"{pr.get('title') or ''}\n{pr.get('body') or ''}"
     nums: list[int] = []
     for m in CLOSE_HEAD.finditer(text):
         tail = text[m.end() : m.end() + 240]
-        nums.extend(int(n) for n in CLOSE_NUM.findall(tail))
+        ref = CLOSE_NUM.match(tail)
+        if not ref:
+            continue
+        nums.append(int(ref.group(1)))
+        pos = ref.end()
+        while True:
+            separator = CLOSE_SEP.match(tail, pos)
+            if not separator:
+                break
+            ref = CLOSE_NUM.match(tail, separator.end())
+            if not ref:
+                break
+            nums.append(int(ref.group(1)))
+            pos = ref.end()
     # de-dupe, keep order
     seen = set()
     out = []
     for n in nums:
-        if n not in seen:
+        if n not in seen and (valid_issue_numbers is None or n in valid_issue_numbers):
             seen.add(n)
             out.append(n)
     return out
@@ -156,11 +206,13 @@ def minmax(values: list[float]) -> list[float]:
     return [100.0 * (v - lo) / (hi - lo) for v in values]
 
 
-def notable_prs(prs: list[dict], limit: int = 3) -> list[dict]:
+def notable_prs(
+    prs: list[dict], valid_issue_numbers: set[int], limit: int = 3
+) -> list[dict]:
     def score(pr: dict) -> tuple:
         return (
             0 if is_stamphog(pr) else 1,
-            3 if issue_refs(pr) else 0,
+            3 if issue_refs(pr, valid_issue_numbers) else 0,
             2 if has_bug_label(pr) else 0,
             pr.get("comments") or 0,
         )
@@ -169,7 +221,7 @@ def notable_prs(prs: list[dict], limit: int = 3) -> list[dict]:
     for pr in sorted(prs, key=score, reverse=True):
         if is_stamphog(pr):
             continue
-        refs = issue_refs(pr)
+        refs = issue_refs(pr, valid_issue_numbers)
         reasons = []
         if refs:
             reasons.append("closing-keyword refs " + ", ".join(f"#{n}" for n in refs[:3]))
@@ -223,7 +275,10 @@ def notable_reviews(reviewed: list[dict], self_login: str, limit: int = 3) -> li
 
 
 def why_sentence(p: dict) -> str:
-    """Describe the person from their actual PR titles, not a causal template."""
+    """Use an editorial summary for finalists, with a data-derived fallback."""
+    editorial = EDITORIAL_WHY.get(p["login"])
+    if editorial:
+        return editorial
     titles = [e["title"] for e in (p.get("evidence") or {}).get("prs") or [] if e.get("title")]
     name = p.get("name") or p["login"]
     if titles:
@@ -249,6 +304,7 @@ def main() -> int:
     users = load("users.json")
     reviews = load("reviews.json") if (RAW / "reviews.json").exists() else {}
     members = set(load("members.json")) if (RAW / "members.json").exists() else set()
+    valid_issue_numbers = {i["number"] for i in issues if i.get("number") is not None}
 
     staff_users = {login: u for login, u in users.items() if affiliated(u, members)}
 
@@ -291,7 +347,7 @@ def main() -> int:
             continue
 
         usable = [p for p in mine if not is_stamphog(p)]
-        issue_closing = [p for p in usable if issue_refs(p)]
+        issue_closing = [p for p in usable if issue_refs(p, valid_issue_numbers)]
         bug_prs = [p for p in usable if has_bug_label(p)]
         high_disc = [p for p in usable if (p.get("comments") or 0) >= high_bar]
         other = [p for p in usable if p not in issue_closing and p not in bug_prs]
@@ -316,7 +372,7 @@ def main() -> int:
         people.append(
             {
                 "login": login,
-                "name": u.get("name") or login,
+                "name": EDITORIAL_NAMES.get(login) or u.get("name") or login,
                 "avatar_url": u.get("avatar_url"),
                 "html_url": u.get("html_url") or f"https://github.com/{login}",
                 "company": u.get("company"),
@@ -346,7 +402,7 @@ def main() -> int:
                     },
                 },
                 "evidence": {
-                    "prs": notable_prs(mine),
+                    "prs": notable_prs(mine, valid_issue_numbers),
                     "reviews": notable_reviews(reviewed, login),
                     "issues": notable_issues(closed_issues),
                 },
