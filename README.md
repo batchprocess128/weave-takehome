@@ -2,9 +2,9 @@
 
 Weave take-home: identify the most impactful engineers on [`PostHog/posthog`](https://github.com/PostHog/posthog) from the last 90+ days.
 
-**Dashboard:** published from `main:/docs` with GitHub Pages. Replace this line with the Pages URL after the first push.
+**Dashboard:** https://batchprocess128.github.io/weave-takehome/
 
-**Time:** timer started 2026-08-18 11:02 PDT. Reported at submit.
+**Time:** 65 minutes 8 seconds (timer started 2026-08-18 11:02 PDT).
 
 ## What "impact" means
 
