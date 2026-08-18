@@ -1,0 +1,1917 @@
+{
+  "meta": {
+    "repo": "PostHog/posthog",
+    "start": "2026-05-20",
+    "end": "2026-08-18",
+    "fetched_at": "2026-08-18T18:23:44.162059+00:00",
+    "pr_count": 13475,
+    "issue_count": 969,
+    "staff_considered": 106,
+    "staff_scored": 105,
+    "high_comment_threshold": 7,
+    "weights": {
+      "outcomes": 0.4,
+      "review_reach": 0.35,
+      "framing": 0.25
+    },
+    "formulas": {
+      "impact": "impact = 0.40 * outcomes_norm + 0.35 * review_reach_norm + 0.25 * framing_norm",
+      "normalization": "Each pillar raw score is min-max scaled to 0-100 across the scored population (PostHog-affiliated GitHub contributors with at least one merged PR or one reviewed-by hit in the window). If max == min, everyone gets 0 on that pillar.",
+      "outcomes_raw": "outcomes_raw = 3 * issue_ref_prs + 2 * bug_only_prs + 4 * ln(1 + high_comment_prs) + ln(1 + other_prs). Stamphog-labeled PRs are excluded from every outcomes term. No revert penalty (the revert author is often containing someone else's break).",
+      "review_reach_raw": "review_reach_raw = ln(1 + reviewed_others) + ln(1 + distinct_authors). reviewed_others = merged PRs in the window matching GitHub search reviewed-by:LOGIN, excluding PRs the person authored. This is review reach, not unblocking, and not review depth. We did not fetch individual review events, bodies, or CHANGES_REQUESTED.",
+      "framing_raw": "framing_raw = issues_authored_and_closed_in_window. An issue counts only if the person is the author AND closed_at falls in 2026-05-20 .. 2026-08-18 inclusive (UTC date). GitHub issues are a weak proxy; PostHog tracks most work in Linear.",
+      "issue_ref_parser": "A PR is an issue-ref PR if title+body contains a GitHub closing keyword (close/closes/closed, fix/fixes/fixed, resolve/resolves/resolved) followed by #N, owner/repo#N, or a github.com/.../issues/N URL. 'implements #N' does not count. This is a parser over PR text, not GitHub's linked-issue graph.",
+      "high_comment": "high_comment_prs = staff-authored, non-stamphog PRs whose conversation comment count (the comments field returned by GitHub issue search) is at or above the 75th percentile of that population, floored at 6. This is not review-discussion depth."
+    },
+    "normalization_bounds": {
+      "outcomes": {
+        "min": 0.69,
+        "max": 148.43
+      },
+      "review_reach": {
+        "min": 0.0,
+        "max": 10.55
+      },
+      "framing": {
+        "min": 0.0,
+        "max": 47.0
+      }
+    },
+    "population": "PostHog-affiliated GitHub contributors: company contains 'posthog', or bio contains 'posthog', or login ends in -ph / -posthog, or public org member whose company is empty or PostHog. Public members with a different company are excluded. Role and employment dates are inferred, not verified.",
+    "excluded_from_rank": [
+      "lines of code",
+      "commit count",
+      "files changed",
+      "raw PR volume (log-damped leftover term only)",
+      "revert authorship",
+      "review depth / CHANGES_REQUESTED",
+      "stamphog-labeled PRs (outcomes terms)"
+    ],
+    "skipped_no_signal": [
+      "adletsmykov"
+    ]
+  },
+  "top5": [
+    {
+      "login": "arthurdedeus",
+      "name": "Arthur Moreira de Deus",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54866778?v=4",
+      "html_url": "https://github.com/arthurdedeus",
+      "company": "@posthog",
+      "affiliation": "inferred from GitHub company, bio, login suffix, or public org membership",
+      "pillars": {
+        "outcomes": {
+          "merged_prs": 175,
+          "stamphog_prs": 77,
+          "scored_prs": 98,
+          "issue_ref_prs": 43,
+          "bug_only_prs": 0,
+          "bug_prs": 0,
+          "high_comment_prs": 46,
+          "other_prs": 55,
+          "score": 100.0,
+          "raw": 148.43
+        },
+        "review_reach": {
+          "reviewed_others": 122,
+          "distinct_authors": 25,
+          "score": 76.5,
+          "raw": 8.07
+        },
+        "framing": {
+          "issues_authored_closed_in_window": 47,
+          "score": 100.0,
+          "raw": 47.0
+        }
+      },
+      "evidence": {
+        "prs": [
+          {
+            "number": 59935,
+            "title": "feat(customer-analytics): account notebooks",
+            "html_url": "https://github.com/PostHog/posthog/pull/59935",
+            "comments": 15,
+            "why": "closing-keyword refs #57026; 15 conversation comments"
+          },
+          {
+            "number": 59465,
+            "title": "feat(customer-analytics): Implement account tagging",
+            "html_url": "https://github.com/PostHog/posthog/pull/59465",
+            "comments": 14,
+            "why": "closing-keyword refs #57019; 14 conversation comments"
+          },
+          {
+            "number": 78502,
+            "title": "feat(customer-analytics): google calendar sync engine on temporal",
+            "html_url": "https://github.com/PostHog/posthog/pull/78502",
+            "comments": 14,
+            "why": "closing-keyword refs #76088, #78501; 14 conversation comments"
+          }
+        ],
+        "reviews": [
+          {
+            "number": 51311,
+            "title": "feat(web-analytics): simplify cookieless setting to a single toggle",
+            "html_url": "https://github.com/PostHog/posthog/pull/51311",
+            "comments": 22,
+            "why": "reviewed-by:arthurdedeus; authored by @lricoy"
+          },
+          {
+            "number": 60586,
+            "title": "feat(web-analytics): add web_bot_definition REGEXP_TREE dictionary to ClickHouse",
+            "html_url": "https://github.com/PostHog/posthog/pull/60586",
+            "comments": 20,
+            "why": "reviewed-by:arthurdedeus; authored by @lricoy"
+          },
+          {
+            "number": 72984,
+            "title": "feat(revenue-analytics): remove deprecated dashboard, keep person/group revenue properties",
+            "html_url": "https://github.com/PostHog/posthog/pull/72984",
+            "comments": 13,
+            "why": "reviewed-by:arthurdedeus; authored by @rafaeelaudibert"
+          }
+        ],
+        "issues": [
+          {
+            "number": 61893,
+            "title": "PostHog AI agent mode for customer analytics",
+            "html_url": "https://github.com/PostHog/posthog/issues/61893",
+            "comments": 3,
+            "why": "authored; closed 2026-07-02 (inside window)"
+          }
+        ]
+      },
+      "impact": 91.8,
+      "why": "Arthur Moreira de Deus landed work such as: feat(customer-analytics): account notebooks; feat(customer-analytics): Implement account tagging; feat(customer-analytics): google calendar sync engine on temporal",
+      "rank": 1
+    },
+    {
+      "login": "fercgomes",
+      "name": "Fernando Gomes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28491014?v=4",
+      "html_url": "https://github.com/fercgomes",
+      "company": "Posthog",
+      "affiliation": "inferred from GitHub company, bio, login suffix, or public org membership",
+      "pillars": {
+        "outcomes": {
+          "merged_prs": 115,
+          "stamphog_prs": 28,
+          "scored_prs": 87,
+          "issue_ref_prs": 27,
+          "bug_only_prs": 0,
+          "bug_prs": 0,
+          "high_comment_prs": 39,
+          "other_prs": 60,
+          "score": 67.1,
+          "raw": 99.87
+        },
+        "review_reach": {
+          "reviewed_others": 114,
+          "distinct_authors": 17,
+          "score": 72.4,
+          "raw": 7.64
+        },
+        "framing": {
+          "issues_authored_closed_in_window": 31,
+          "score": 66.0,
+          "raw": 31.0
+        }
+      },
+      "evidence": {
+        "prs": [
+          {
+            "number": 74880,
+            "title": "fix(provisioning): stop handing partners a host their account isn't on",
+            "html_url": "https://github.com/PostHog/posthog/pull/74880",
+            "comments": 27,
+            "why": "closing-keyword refs #74307; 27 conversation comments"
+          },
+          {
+            "number": 74278,
+            "title": "feat(navigation): per-user sidebar customization via ui_configuration",
+            "html_url": "https://github.com/PostHog/posthog/pull/74278",
+            "comments": 12,
+            "why": "closing-keyword refs #74308; 12 conversation comments"
+          },
+          {
+            "number": 78517,
+            "title": "feat(auth): add glass auth flow variant with the garden design language",
+            "html_url": "https://github.com/PostHog/posthog/pull/78517",
+            "comments": 12,
+            "why": "closing-keyword refs #78475; 12 conversation comments"
+          }
+        ],
+        "reviews": [
+          {
+            "number": 67968,
+            "title": "feat(growth): add organization product push campaigns",
+            "html_url": "https://github.com/PostHog/posthog/pull/67968",
+            "comments": 17,
+            "why": "reviewed-by:fercgomes; authored by @rafaeelaudibert"
+          },
+          {
+            "number": 59128,
+            "title": "feat(oauth): restrict and revoke tokens minted during impersonation sessions",
+            "html_url": "https://github.com/PostHog/posthog/pull/59128",
+            "comments": 15,
+            "why": "reviewed-by:fercgomes; authored by @rafaeelaudibert"
+          },
+          {
+            "number": 66168,
+            "title": "feat(wizard): add cloud wizard run endpoint and workflow integration",
+            "html_url": "https://github.com/PostHog/posthog/pull/66168",
+            "comments": 13,
+            "why": "reviewed-by:fercgomes; authored by @rafaeelaudibert"
+          }
+        ],
+        "issues": [
+          {
+            "number": 74935,
+            "title": "Wizard sync handoff",
+            "html_url": "https://github.com/PostHog/posthog/issues/74935",
+            "comments": 1,
+            "why": "authored; closed 2026-07-31 (inside window)"
+          }
+        ]
+      },
+      "impact": 68.7,
+      "why": "Fernando Gomes landed work such as: fix(provisioning): stop handing partners a host their account isn't on; feat(navigation): per-user sidebar customization via ui_configuration; feat(auth): add glass auth flow variant with the garden design language",
+      "rank": 2
+    },
+    {
+      "login": "Gilbert09",
+      "name": "Tom Owers",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1459269?v=4",
+      "html_url": "https://github.com/Gilbert09",
+      "company": null,
+      "affiliation": "inferred from GitHub company, bio, login suffix, or public org membership",
+      "pillars": {
+        "outcomes": {
+          "merged_prs": 2214,
+          "stamphog_prs": 1160,
+          "scored_prs": 1054,
+          "issue_ref_prs": 18,
+          "bug_only_prs": 0,
+          "bug_prs": 0,
+          "high_comment_prs": 287,
+          "other_prs": 1036,
+          "score": 56.1,
+          "raw": 83.6
+        },
+        "review_reach": {
+          "reviewed_others": 437,
+          "distinct_authors": 57,
+          "score": 96.1,
+          "raw": 10.14
+        },
+        "framing": {
+          "issues_authored_closed_in_window": 0,
+          "score": 0.0,
+          "raw": 0.0
+        }
+      },
+      "evidence": {
+        "prs": [
+          {
+            "number": 63233,
+            "title": "feat(data-warehouse): implement google analytics import source",
+            "html_url": "https://github.com/PostHog/posthog/pull/63233",
+            "comments": 11,
+            "why": "closing-keyword refs #63170; 11 conversation comments"
+          },
+          {
+            "number": 78791,
+            "title": "fix(deltalite): close the three delta-rs MERGE fallback causes",
+            "html_url": "https://github.com/PostHog/posthog/pull/78791",
+            "comments": 10,
+            "why": "closing-keyword refs #1, #3, #2; 10 conversation comments"
+          },
+          {
+            "number": 66297,
+            "title": "feat(data-warehouse): improve onboarding source picker and table setup",
+            "html_url": "https://github.com/PostHog/posthog/pull/66297",
+            "comments": 6,
+            "why": "closing-keyword refs #4"
+          }
+        ],
+        "reviews": [
+          {
+            "number": 65423,
+            "title": "feat(warehouse_sources): add Custom REST source preview/test-read endpoint",
+            "html_url": "https://github.com/PostHog/posthog/pull/65423",
+            "comments": 15,
+            "why": "reviewed-by:Gilbert09; authored by @MarconLP"
+          },
+          {
+            "number": 74693,
+            "title": "feat(data-quality): add the checks REST API and information_schema tables",
+            "html_url": "https://github.com/PostHog/posthog/pull/74693",
+            "comments": 15,
+            "why": "reviewed-by:Gilbert09; authored by @thiagosalvatore"
+          },
+          {
+            "number": 62773,
+            "title": "feat(warehouse): add row filters to SQL data warehouse sources",
+            "html_url": "https://github.com/PostHog/posthog/pull/62773",
+            "comments": 14,
+            "why": "reviewed-by:Gilbert09; authored by @danielcarletti"
+          }
+        ],
+        "issues": []
+      },
+      "impact": 56.1,
+      "why": "Tom Owers landed work such as: feat(data-warehouse): implement google analytics import source; fix(deltalite): close the three delta-rs MERGE fallback causes; feat(data-warehouse): improve onboarding source picker and table setup",
+      "rank": 3
+    },
+    {
+      "login": "pauldambra",
+      "name": "Paul D'Ambra",
+      "avatar_url": "https://avatars.githubusercontent.com/u/984817?v=4",
+      "html_url": "https://github.com/pauldambra",
+      "company": "@posthog",
+      "affiliation": "inferred from GitHub company, bio, login suffix, or public org membership",
+      "pillars": {
+        "outcomes": {
+          "merged_prs": 517,
+          "stamphog_prs": 281,
+          "scored_prs": 236,
+          "issue_ref_prs": 20,
+          "bug_only_prs": 0,
+          "bug_prs": 0,
+          "high_comment_prs": 115,
+          "other_prs": 216,
+          "score": 56.7,
+          "raw": 84.39
+        },
+        "review_reach": {
+          "reviewed_others": 179,
+          "distinct_authors": 43,
+          "score": 85.1,
+          "raw": 8.98
+        },
+        "framing": {
+          "issues_authored_closed_in_window": 4,
+          "score": 8.5,
+          "raw": 4.0
+        }
+      },
+      "evidence": {
+        "prs": [
+          {
+            "number": 59490,
+            "title": "fix(llma): accept OAuth tokens on @me/spend with personal_spend scope",
+            "html_url": "https://github.com/PostHog/posthog/pull/59490",
+            "comments": 12,
+            "why": "closing-keyword refs #59392; 12 conversation comments"
+          },
+          {
+            "number": 60808,
+            "title": "feat(user_interviews): classify responses (abandoned/short/off-topic/long)",
+            "html_url": "https://github.com/PostHog/posthog/pull/60808",
+            "comments": 12,
+            "why": "closing-keyword refs #61239; 12 conversation comments"
+          },
+          {
+            "number": 62384,
+            "title": "fix(search): literal-substring matching for hog functions",
+            "html_url": "https://github.com/PostHog/posthog/pull/62384",
+            "comments": 12,
+            "why": "closing-keyword refs #62358; 12 conversation comments"
+          }
+        ],
+        "reviews": [
+          {
+            "number": 59664,
+            "title": "chore(devex): per-product backend coverage report on PRs",
+            "html_url": "https://github.com/PostHog/posthog/pull/59664",
+            "comments": 21,
+            "why": "reviewed-by:pauldambra; authored by @webjunkie"
+          },
+          {
+            "number": 58628,
+            "title": "feat(surveys): replace 'Default' translation with explicit base_language",
+            "html_url": "https://github.com/PostHog/posthog/pull/58628",
+            "comments": 16,
+            "why": "reviewed-by:pauldambra; authored by @lucasheriques"
+          },
+          {
+            "number": 62672,
+            "title": "feat(devex): per-PR PostHog preview environments on hogland hogboxes",
+            "html_url": "https://github.com/PostHog/posthog/pull/62672",
+            "comments": 15,
+            "why": "reviewed-by:pauldambra; authored by @webjunkie"
+          }
+        ],
+        "issues": [
+          {
+            "number": 30889,
+            "title": "Replay features mobile parity tracker-otron",
+            "html_url": "https://github.com/PostHog/posthog/issues/30889",
+            "comments": 12,
+            "why": "authored; closed 2026-07-17 (inside window)"
+          }
+        ]
+      },
+      "impact": 54.6,
+      "why": "Paul D'Ambra landed work such as: fix(llma): accept OAuth tokens on @me/spend with personal_spend scope; feat(user_interviews): classify responses (abandoned/short/off-topic/long); fix(search): literal-substring matching for hog functions",
+      "rank": 4
+    },
+    {
+      "login": "webjunkie",
+      "name": "Julian Bez",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59713?v=4",
+      "html_url": "https://github.com/webjunkie",
+      "company": "@PostHog",
+      "affiliation": "inferred from GitHub company, bio, login suffix, or public org membership",
+      "pillars": {
+        "outcomes": {
+          "merged_prs": 237,
+          "stamphog_prs": 48,
+          "scored_prs": 189,
+          "issue_ref_prs": 20,
+          "bug_only_prs": 0,
+          "bug_prs": 0,
+          "high_comment_prs": 47,
+          "other_prs": 169,
+          "score": 54.1,
+          "raw": 80.62
+        },
+        "review_reach": {
+          "reviewed_others": 210,
+          "distinct_authors": 43,
+          "score": 86.6,
+          "raw": 9.14
+        },
+        "framing": {
+          "issues_authored_closed_in_window": 5,
+          "score": 10.6,
+          "raw": 5.0
+        }
+      },
+      "evidence": {
+        "prs": [
+          {
+            "number": 82442,
+            "title": "chore(devex): make product isolation checks enforce what they claim",
+            "html_url": "https://github.com/PostHog/posthog/pull/82442",
+            "comments": 14,
+            "why": "closing-keyword refs #36780; 14 conversation comments"
+          },
+          {
+            "number": 60849,
+            "title": "perf(api): lazy DRF router, defer heavy imports off django.setup()",
+            "html_url": "https://github.com/PostHog/posthog/pull/60849",
+            "comments": 13,
+            "why": "closing-keyword refs #60700; 13 conversation comments"
+          },
+          {
+            "number": 54280,
+            "title": "feat(ci): auto-size Django test shard counts from .test_durations",
+            "html_url": "https://github.com/PostHog/posthog/pull/54280",
+            "comments": 11,
+            "why": "closing-keyword refs #60167, #60292; 11 conversation comments"
+          }
+        ],
+        "reviews": [
+          {
+            "number": 59440,
+            "title": "chore(python): bump to 3.13.13",
+            "html_url": "https://github.com/PostHog/posthog/pull/59440",
+            "comments": 53,
+            "why": "reviewed-by:webjunkie; authored by @rnegron"
+          },
+          {
+            "number": 66355,
+            "title": "feat(billing): add billing alerts backend",
+            "html_url": "https://github.com/PostHog/posthog/pull/66355",
+            "comments": 25,
+            "why": "reviewed-by:webjunkie; authored by @willwearing"
+          },
+          {
+            "number": 61945,
+            "title": "feat(dashboards): widget config SSOT and codegen (6/6)",
+            "html_url": "https://github.com/PostHog/posthog/pull/61945",
+            "comments": 20,
+            "why": "reviewed-by:webjunkie; authored by @MattPua"
+          }
+        ],
+        "issues": [
+          {
+            "number": 51029,
+            "title": "feat(devex): use hogli as single source of truth for CI and local",
+            "html_url": "https://github.com/PostHog/posthog/issues/51029",
+            "comments": 1,
+            "why": "authored; closed 2026-08-11 (inside window)"
+          }
+        ]
+      },
+      "impact": 54.6,
+      "why": "Julian Bez landed work such as: chore(devex): make product isolation checks enforce what they claim; perf(api): lazy DRF router, defer heavy imports off django.setup(); feat(ci): auto-size Django test shard counts from .test_durations",
+      "rank": 5
+    }
+  ],
+  "all": [
+    {
+      "rank": 1,
+      "login": "arthurdedeus",
+      "name": "Arthur Moreira de Deus",
+      "impact": 91.8,
+      "outcomes": 100.0,
+      "review_reach": 76.5,
+      "framing": 100.0,
+      "merged_prs": 175,
+      "issue_ref_prs": 43,
+      "reviewed_others": 122,
+      "issues_authored_closed_in_window": 47
+    },
+    {
+      "rank": 2,
+      "login": "fercgomes",
+      "name": "Fernando Gomes",
+      "impact": 68.7,
+      "outcomes": 67.1,
+      "review_reach": 72.4,
+      "framing": 66.0,
+      "merged_prs": 115,
+      "issue_ref_prs": 27,
+      "reviewed_others": 114,
+      "issues_authored_closed_in_window": 31
+    },
+    {
+      "rank": 3,
+      "login": "Gilbert09",
+      "name": "Tom Owers",
+      "impact": 56.1,
+      "outcomes": 56.1,
+      "review_reach": 96.1,
+      "framing": 0.0,
+      "merged_prs": 2214,
+      "issue_ref_prs": 18,
+      "reviewed_others": 437,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 4,
+      "login": "pauldambra",
+      "name": "Paul D'Ambra",
+      "impact": 54.6,
+      "outcomes": 56.7,
+      "review_reach": 85.1,
+      "framing": 8.5,
+      "merged_prs": 517,
+      "issue_ref_prs": 20,
+      "reviewed_others": 179,
+      "issues_authored_closed_in_window": 4
+    },
+    {
+      "rank": 5,
+      "login": "webjunkie",
+      "name": "Julian Bez",
+      "impact": 54.6,
+      "outcomes": 54.1,
+      "review_reach": 86.6,
+      "framing": 10.6,
+      "merged_prs": 237,
+      "issue_ref_prs": 20,
+      "reviewed_others": 210,
+      "issues_authored_closed_in_window": 5
+    },
+    {
+      "rank": 6,
+      "login": "jakesciotto",
+      "name": "jake sciotto",
+      "impact": 52.3,
+      "outcomes": 73.6,
+      "review_reach": 0.0,
+      "framing": 91.5,
+      "merged_prs": 61,
+      "issue_ref_prs": 31,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 43
+    },
+    {
+      "rank": 7,
+      "login": "rnegron",
+      "name": "Ra\u00fal Negr\u00f3n-Otero",
+      "impact": 48.8,
+      "outcomes": 43.0,
+      "review_reach": 90.4,
+      "framing": 0.0,
+      "merged_prs": 286,
+      "issue_ref_prs": 15,
+      "reviewed_others": 271,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 8,
+      "login": "andrewm4894",
+      "name": "Andrew Maguire",
+      "impact": 48.3,
+      "outcomes": 32.1,
+      "review_reach": 90.8,
+      "framing": 14.9,
+      "merged_prs": 356,
+      "issue_ref_prs": 9,
+      "reviewed_others": 344,
+      "issues_authored_closed_in_window": 7
+    },
+    {
+      "rank": 9,
+      "login": "gantoine",
+      "name": "Georges-Antoine Assi",
+      "impact": 47.7,
+      "outcomes": 30.4,
+      "review_reach": 100.0,
+      "framing": 2.1,
+      "merged_prs": 105,
+      "issue_ref_prs": 10,
+      "reviewed_others": 489,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 10,
+      "login": "dmarchuk",
+      "name": "Daniel Marchuk",
+      "impact": 46.8,
+      "outcomes": 48.4,
+      "review_reach": 75.3,
+      "framing": 4.3,
+      "merged_prs": 111,
+      "issue_ref_prs": 18,
+      "reviewed_others": 148,
+      "issues_authored_closed_in_window": 2
+    },
+    {
+      "rank": 11,
+      "login": "thmsobrmlr",
+      "name": "Thomas Oberm\u00fcller",
+      "impact": 45.4,
+      "outcomes": 35.4,
+      "review_reach": 78.7,
+      "framing": 14.9,
+      "merged_prs": 172,
+      "issue_ref_prs": 12,
+      "reviewed_others": 121,
+      "issues_authored_closed_in_window": 7
+    },
+    {
+      "rank": 12,
+      "login": "skoob13",
+      "name": "Georgiy Tarasov",
+      "impact": 42.5,
+      "outcomes": 25.7,
+      "review_reach": 89.1,
+      "framing": 4.3,
+      "merged_prs": 217,
+      "issue_ref_prs": 6,
+      "reviewed_others": 267,
+      "issues_authored_closed_in_window": 2
+    },
+    {
+      "rank": 13,
+      "login": "robbie-c",
+      "name": "Robbie",
+      "impact": 41.3,
+      "outcomes": 47.5,
+      "review_reach": 63.8,
+      "framing": 0.0,
+      "merged_prs": 136,
+      "issue_ref_prs": 18,
+      "reviewed_others": 39,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 14,
+      "login": "lricoy",
+      "name": "Lucas Ricoy",
+      "impact": 40.9,
+      "outcomes": 30.5,
+      "review_reach": 82.0,
+      "framing": 0.0,
+      "merged_prs": 166,
+      "issue_ref_prs": 10,
+      "reviewed_others": 172,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 15,
+      "login": "rafaeelaudibert",
+      "name": "Rafael Audibert",
+      "impact": 40.9,
+      "outcomes": 24.1,
+      "review_reach": 89.2,
+      "framing": 0.0,
+      "merged_prs": 155,
+      "issue_ref_prs": 5,
+      "reviewed_others": 253,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 16,
+      "login": "MattPua",
+      "name": "Matt Pua",
+      "impact": 40.5,
+      "outcomes": 28.4,
+      "review_reach": 80.2,
+      "framing": 4.3,
+      "merged_prs": 212,
+      "issue_ref_prs": 7,
+      "reviewed_others": 123,
+      "issues_authored_closed_in_window": 2
+    },
+    {
+      "rank": 17,
+      "login": "mariusandra",
+      "name": "Marius Andra",
+      "impact": 37.6,
+      "outcomes": 18.9,
+      "review_reach": 84.4,
+      "framing": 2.1,
+      "merged_prs": 67,
+      "issue_ref_prs": 4,
+      "reviewed_others": 170,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 18,
+      "login": "hpouillot",
+      "name": "Hugues Pouillot",
+      "impact": 37.3,
+      "outcomes": 25.8,
+      "review_reach": 77.1,
+      "framing": 0.0,
+      "merged_prs": 129,
+      "issue_ref_prs": 7,
+      "reviewed_others": 148,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 19,
+      "login": "christiaan-ph",
+      "name": "Christiaan Hendriksen",
+      "impact": 36.9,
+      "outcomes": 55.9,
+      "review_reach": 26.3,
+      "framing": 21.3,
+      "merged_prs": 71,
+      "issue_ref_prs": 12,
+      "reviewed_others": 3,
+      "issues_authored_closed_in_window": 10
+    },
+    {
+      "rank": 20,
+      "login": "Piccirello",
+      "name": "Tom Piccirello",
+      "impact": 36.6,
+      "outcomes": 18.9,
+      "review_reach": 83.0,
+      "framing": 0.0,
+      "merged_prs": 106,
+      "issue_ref_prs": 4,
+      "reviewed_others": 132,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 21,
+      "login": "carlos-marchal-ph",
+      "name": "Carlos Marchal",
+      "impact": 36.1,
+      "outcomes": 26.3,
+      "review_reach": 73.1,
+      "framing": 0.0,
+      "merged_prs": 98,
+      "issue_ref_prs": 8,
+      "reviewed_others": 101,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 22,
+      "login": "eli-r-ph",
+      "name": "Eli Reisman",
+      "impact": 35.6,
+      "outcomes": 25.8,
+      "review_reach": 70.7,
+      "framing": 2.1,
+      "merged_prs": 114,
+      "issue_ref_prs": 8,
+      "reviewed_others": 115,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 23,
+      "login": "cat-ph",
+      "name": "Catalin",
+      "impact": 35.3,
+      "outcomes": 24.7,
+      "review_reach": 72.6,
+      "framing": 0.0,
+      "merged_prs": 104,
+      "issue_ref_prs": 8,
+      "reviewed_others": 163,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 24,
+      "login": "sakce",
+      "name": "Jovan Sakovic",
+      "impact": 35.2,
+      "outcomes": 22.6,
+      "review_reach": 74.8,
+      "framing": 0.0,
+      "merged_prs": 166,
+      "issue_ref_prs": 5,
+      "reviewed_others": 95,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 25,
+      "login": "tatoalo",
+      "name": "Alessandro Pogliaghi",
+      "impact": 35.2,
+      "outcomes": 14.4,
+      "review_reach": 82.5,
+      "framing": 2.1,
+      "merged_prs": 204,
+      "issue_ref_prs": 1,
+      "reviewed_others": 182,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 26,
+      "login": "MarconLP",
+      "name": "Marcus Hof",
+      "impact": 35.1,
+      "outcomes": 7.9,
+      "review_reach": 86.6,
+      "framing": 6.4,
+      "merged_prs": 49,
+      "issue_ref_prs": 0,
+      "reviewed_others": 583,
+      "issues_authored_closed_in_window": 3
+    },
+    {
+      "rank": 27,
+      "login": "vdekrijger",
+      "name": "Vasco de Krijger",
+      "impact": 34.5,
+      "outcomes": 25.7,
+      "review_reach": 67.7,
+      "framing": 2.1,
+      "merged_prs": 85,
+      "issue_ref_prs": 7,
+      "reviewed_others": 96,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 28,
+      "login": "VojtechBartos",
+      "name": "Vojta Barto\u0161",
+      "impact": 34.0,
+      "outcomes": 26.2,
+      "review_reach": 67.3,
+      "framing": 0.0,
+      "merged_prs": 141,
+      "issue_ref_prs": 7,
+      "reviewed_others": 63,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 29,
+      "login": "dmarticus",
+      "name": "Dylan Martin",
+      "impact": 33.9,
+      "outcomes": 16.0,
+      "review_reach": 67.8,
+      "framing": 14.9,
+      "merged_prs": 42,
+      "issue_ref_prs": 3,
+      "reviewed_others": 70,
+      "issues_authored_closed_in_window": 7
+    },
+    {
+      "rank": 30,
+      "login": "ablaszkiewicz",
+      "name": "Aleksander B\u0142aszkiewicz",
+      "impact": 33.8,
+      "outcomes": 19.8,
+      "review_reach": 74.0,
+      "framing": 0.0,
+      "merged_prs": 93,
+      "issue_ref_prs": 5,
+      "reviewed_others": 144,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 31,
+      "login": "Radu-Raicea",
+      "name": "Radu Raicea",
+      "impact": 33.5,
+      "outcomes": 13.9,
+      "review_reach": 79.9,
+      "framing": 0.0,
+      "merged_prs": 109,
+      "issue_ref_prs": 1,
+      "reviewed_others": 168,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 32,
+      "login": "richardsolomou",
+      "name": "Richard Solomou",
+      "impact": 32.8,
+      "outcomes": 11.4,
+      "review_reach": 79.2,
+      "framing": 2.1,
+      "merged_prs": 28,
+      "issue_ref_prs": 2,
+      "reviewed_others": 136,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 33,
+      "login": "georgemunyoro",
+      "name": "George Munyoro",
+      "impact": 32.4,
+      "outcomes": 11.3,
+      "review_reach": 79.6,
+      "framing": 0.0,
+      "merged_prs": 43,
+      "issue_ref_prs": 2,
+      "reviewed_others": 133,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 34,
+      "login": "sortafreel",
+      "name": "Alex Lebedev",
+      "impact": 32.3,
+      "outcomes": 17.5,
+      "review_reach": 72.2,
+      "framing": 0.0,
+      "merged_prs": 55,
+      "issue_ref_prs": 3,
+      "reviewed_others": 96,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 35,
+      "login": "nickbest-ph",
+      "name": "Nick Best",
+      "impact": 32.1,
+      "outcomes": 18.9,
+      "review_reach": 70.0,
+      "framing": 0.0,
+      "merged_prs": 81,
+      "issue_ref_prs": 5,
+      "reviewed_others": 133,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 36,
+      "login": "joshsny",
+      "name": "Joshua Snyder",
+      "impact": 31.6,
+      "outcomes": 10.9,
+      "review_reach": 77.7,
+      "framing": 0.0,
+      "merged_prs": 105,
+      "issue_ref_prs": 0,
+      "reviewed_others": 151,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 37,
+      "login": "pawel-cebula",
+      "name": "Pawel Cebula",
+      "impact": 31.4,
+      "outcomes": 15.8,
+      "review_reach": 71.7,
+      "framing": 0.0,
+      "merged_prs": 20,
+      "issue_ref_prs": 4,
+      "reviewed_others": 59,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 38,
+      "login": "ReeceJones",
+      "name": "Reece Jones",
+      "impact": 30.9,
+      "outcomes": 11.6,
+      "review_reach": 74.9,
+      "framing": 0.0,
+      "merged_prs": 63,
+      "issue_ref_prs": 0,
+      "reviewed_others": 112,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 39,
+      "login": "andyzzhao",
+      "name": "Andy Zhao",
+      "impact": 30.5,
+      "outcomes": 13.1,
+      "review_reach": 70.7,
+      "framing": 2.1,
+      "merged_prs": 79,
+      "issue_ref_prs": 3,
+      "reviewed_others": 95,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 40,
+      "login": "Twixes",
+      "name": "Michael Matloka",
+      "impact": 30.3,
+      "outcomes": 13.4,
+      "review_reach": 69.7,
+      "framing": 2.1,
+      "merged_prs": 87,
+      "issue_ref_prs": 1,
+      "reviewed_others": 64,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 41,
+      "login": "yasen-posthog",
+      "name": "Yasen",
+      "impact": 30.2,
+      "outcomes": 15.3,
+      "review_reach": 68.7,
+      "framing": 0.0,
+      "merged_prs": 70,
+      "issue_ref_prs": 2,
+      "reviewed_others": 60,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 42,
+      "login": "DanielVisca",
+      "name": "Daniel Visca",
+      "impact": 30.0,
+      "outcomes": 18.0,
+      "review_reach": 65.2,
+      "framing": 0.0,
+      "merged_prs": 140,
+      "issue_ref_prs": 3,
+      "reviewed_others": 53,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 43,
+      "login": "adboio",
+      "name": "Adam Bowker",
+      "impact": 29.7,
+      "outcomes": 20.0,
+      "review_reach": 59.0,
+      "framing": 4.3,
+      "merged_prs": 66,
+      "issue_ref_prs": 4,
+      "reviewed_others": 35,
+      "issues_authored_closed_in_window": 2
+    },
+    {
+      "rank": 44,
+      "login": "fuziontech",
+      "name": "James Greenhill",
+      "impact": 29.5,
+      "outcomes": 12.2,
+      "review_reach": 70.4,
+      "framing": 0.0,
+      "merged_prs": 27,
+      "issue_ref_prs": 3,
+      "reviewed_others": 168,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 45,
+      "login": "patricio-posthog",
+      "name": "Patricio",
+      "impact": 29.4,
+      "outcomes": 21.6,
+      "review_reach": 56.2,
+      "framing": 4.3,
+      "merged_prs": 32,
+      "issue_ref_prs": 7,
+      "reviewed_others": 46,
+      "issues_authored_closed_in_window": 2
+    },
+    {
+      "rank": 46,
+      "login": "cvolzer3",
+      "name": "Chris Volzer",
+      "impact": 29.4,
+      "outcomes": 18.0,
+      "review_reach": 61.9,
+      "framing": 2.1,
+      "merged_prs": 61,
+      "issue_ref_prs": 4,
+      "reviewed_others": 42,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 47,
+      "login": "marandaneto",
+      "name": "Manoel Aranda Neto",
+      "impact": 29.4,
+      "outcomes": 10.5,
+      "review_reach": 62.8,
+      "framing": 12.8,
+      "merged_prs": 22,
+      "issue_ref_prs": 2,
+      "reviewed_others": 57,
+      "issues_authored_closed_in_window": 6
+    },
+    {
+      "rank": 48,
+      "login": "benjackwhite",
+      "name": "Ben White",
+      "impact": 29.1,
+      "outcomes": 20.6,
+      "review_reach": 55.0,
+      "framing": 6.4,
+      "merged_prs": 78,
+      "issue_ref_prs": 5,
+      "reviewed_others": 21,
+      "issues_authored_closed_in_window": 3
+    },
+    {
+      "rank": 49,
+      "login": "feliperalmeida",
+      "name": "Felipe Rosa de Almeida",
+      "impact": 29.1,
+      "outcomes": 5.7,
+      "review_reach": 76.7,
+      "framing": 0.0,
+      "merged_prs": 14,
+      "issue_ref_prs": 0,
+      "reviewed_others": 90,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 50,
+      "login": "orian",
+      "name": "Pawe\u0142 Szczur",
+      "impact": 28.9,
+      "outcomes": 17.7,
+      "review_reach": 60.8,
+      "framing": 2.1,
+      "merged_prs": 65,
+      "issue_ref_prs": 5,
+      "reviewed_others": 37,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 51,
+      "login": "jurajmajerik",
+      "name": "Juraj Majerik",
+      "impact": 28.8,
+      "outcomes": 13.5,
+      "review_reach": 60.7,
+      "framing": 8.5,
+      "merged_prs": 148,
+      "issue_ref_prs": 2,
+      "reviewed_others": 66,
+      "issues_authored_closed_in_window": 4
+    },
+    {
+      "rank": 52,
+      "login": "thiagosalvatore",
+      "name": "Thiago Salvatore",
+      "impact": 28.4,
+      "outcomes": 20.6,
+      "review_reach": 57.7,
+      "framing": 0.0,
+      "merged_prs": 94,
+      "issue_ref_prs": 4,
+      "reviewed_others": 43,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 53,
+      "login": "brandonleung",
+      "name": "Brandon",
+      "impact": 28.4,
+      "outcomes": 9.1,
+      "review_reach": 70.7,
+      "framing": 0.0,
+      "merged_prs": 29,
+      "issue_ref_prs": 1,
+      "reviewed_others": 101,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 54,
+      "login": "EDsCODE",
+      "name": "Eric Duong",
+      "impact": 28.1,
+      "outcomes": 26.3,
+      "review_reach": 50.2,
+      "framing": 0.0,
+      "merged_prs": 84,
+      "issue_ref_prs": 8,
+      "reviewed_others": 19,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 55,
+      "login": "luke-belton",
+      "name": "Luke Belton",
+      "impact": 28.0,
+      "outcomes": 18.7,
+      "review_reach": 46.5,
+      "framing": 17.0,
+      "merged_prs": 109,
+      "issue_ref_prs": 4,
+      "reviewed_others": 14,
+      "issues_authored_closed_in_window": 8
+    },
+    {
+      "rank": 56,
+      "login": "charlesvien",
+      "name": "Charles Vien",
+      "impact": 27.9,
+      "outcomes": 11.9,
+      "review_reach": 66.0,
+      "framing": 0.0,
+      "merged_prs": 71,
+      "issue_ref_prs": 1,
+      "reviewed_others": 61,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 57,
+      "login": "k11kirky",
+      "name": "Peter Kirkham",
+      "impact": 27.8,
+      "outcomes": 16.2,
+      "review_reach": 60.8,
+      "framing": 0.0,
+      "merged_prs": 58,
+      "issue_ref_prs": 2,
+      "reviewed_others": 46,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 58,
+      "login": "rorylshanks",
+      "name": "Rory Shanks",
+      "impact": 27.7,
+      "outcomes": 4.9,
+      "review_reach": 73.6,
+      "framing": 0.0,
+      "merged_prs": 10,
+      "issue_ref_prs": 0,
+      "reviewed_others": 86,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 59,
+      "login": "pl",
+      "name": "Pawe\u0142 Ledwo\u0144",
+      "impact": 27.5,
+      "outcomes": 18.9,
+      "review_reach": 55.6,
+      "framing": 2.1,
+      "merged_prs": 66,
+      "issue_ref_prs": 6,
+      "reviewed_others": 43,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 60,
+      "login": "gesh",
+      "name": "Georgis Andonis",
+      "impact": 27.5,
+      "outcomes": 16.1,
+      "review_reach": 58.6,
+      "framing": 2.1,
+      "merged_prs": 68,
+      "issue_ref_prs": 4,
+      "reviewed_others": 43,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 61,
+      "login": "slshults",
+      "name": "Steven Shults",
+      "impact": 27.4,
+      "outcomes": 11.3,
+      "review_reach": 30.5,
+      "framing": 48.9,
+      "merged_prs": 24,
+      "issue_ref_prs": 2,
+      "reviewed_others": 4,
+      "issues_authored_closed_in_window": 23
+    },
+    {
+      "rank": 62,
+      "login": "jonmcwest",
+      "name": "Jon McCallum",
+      "impact": 27.1,
+      "outcomes": 13.5,
+      "review_reach": 61.9,
+      "framing": 0.0,
+      "merged_prs": 209,
+      "issue_ref_prs": 1,
+      "reviewed_others": 48,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 63,
+      "login": "abigailbramble",
+      "name": "Abigail",
+      "impact": 26.7,
+      "outcomes": 8.5,
+      "review_reach": 57.4,
+      "framing": 12.8,
+      "merged_prs": 21,
+      "issue_ref_prs": 1,
+      "reviewed_others": 32,
+      "issues_authored_closed_in_window": 6
+    },
+    {
+      "rank": 64,
+      "login": "rossgray",
+      "name": "Ross",
+      "impact": 25.0,
+      "outcomes": 13.4,
+      "review_reach": 56.1,
+      "framing": 0.0,
+      "merged_prs": 55,
+      "issue_ref_prs": 2,
+      "reviewed_others": 52,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 65,
+      "login": "jordanm-posthog",
+      "name": "Jordan Mryyan",
+      "impact": 24.5,
+      "outcomes": 10.1,
+      "review_reach": 58.6,
+      "framing": 0.0,
+      "merged_prs": 83,
+      "issue_ref_prs": 0,
+      "reviewed_others": 43,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 66,
+      "login": "matheus-vb",
+      "name": "Matheus Batista",
+      "impact": 23.7,
+      "outcomes": 10.6,
+      "review_reach": 52.6,
+      "framing": 4.3,
+      "merged_prs": 56,
+      "issue_ref_prs": 2,
+      "reviewed_others": 42,
+      "issues_authored_closed_in_window": 2
+    },
+    {
+      "rank": 67,
+      "login": "jonathanlab",
+      "name": "Jonathan Mieloo",
+      "impact": 23.4,
+      "outcomes": 5.2,
+      "review_reach": 60.8,
+      "framing": 0.0,
+      "merged_prs": 15,
+      "issue_ref_prs": 0,
+      "reviewed_others": 60,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 68,
+      "login": "xljones",
+      "name": "Xander",
+      "impact": 22.2,
+      "outcomes": 14.3,
+      "review_reach": 47.1,
+      "framing": 0.0,
+      "merged_prs": 60,
+      "issue_ref_prs": 3,
+      "reviewed_others": 17,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 69,
+      "login": "turnipdabeets",
+      "name": "Anna Garcia",
+      "impact": 21.5,
+      "outcomes": 7.2,
+      "review_reach": 50.1,
+      "framing": 4.3,
+      "merged_prs": 13,
+      "issue_ref_prs": 2,
+      "reviewed_others": 32,
+      "issues_authored_closed_in_window": 2
+    },
+    {
+      "rank": 70,
+      "login": "dustinbyrne",
+      "name": "Dustin Byrne",
+      "impact": 19.7,
+      "outcomes": 2.5,
+      "review_reach": 50.4,
+      "framing": 4.3,
+      "merged_prs": 4,
+      "issue_ref_prs": 0,
+      "reviewed_others": 28,
+      "issues_authored_closed_in_window": 2
+    },
+    {
+      "rank": 71,
+      "login": "bciaraldi",
+      "name": "Bryan Ciaraldi",
+      "impact": 19.0,
+      "outcomes": 2.9,
+      "review_reach": 50.9,
+      "framing": 0.0,
+      "merged_prs": 8,
+      "issue_ref_prs": 0,
+      "reviewed_others": 26,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 72,
+      "login": "andrewjmcgehee",
+      "name": "andrew j. mcgehee",
+      "impact": 17.3,
+      "outcomes": 4.0,
+      "review_reach": 43.3,
+      "framing": 2.1,
+      "merged_prs": 12,
+      "issue_ref_prs": 0,
+      "reviewed_others": 23,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 73,
+      "login": "abhischekt",
+      "name": "Abhischek",
+      "impact": 16.8,
+      "outcomes": 5.2,
+      "review_reach": 42.0,
+      "framing": 0.0,
+      "merged_prs": 16,
+      "issue_ref_prs": 0,
+      "reviewed_others": 13,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 74,
+      "login": "k33lan",
+      "name": "Keelan J.",
+      "impact": 15.5,
+      "outcomes": 4.3,
+      "review_reach": 39.3,
+      "framing": 0.0,
+      "merged_prs": 4,
+      "issue_ref_prs": 2,
+      "reviewed_others": 8,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 75,
+      "login": "bill-ph",
+      "name": "Bill Guowei Yang",
+      "impact": 15.0,
+      "outcomes": 2.9,
+      "review_reach": 39.6,
+      "framing": 0.0,
+      "merged_prs": 8,
+      "issue_ref_prs": 0,
+      "reviewed_others": 12,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 76,
+      "login": "clr182",
+      "name": "Christian Rafferty",
+      "impact": 13.5,
+      "outcomes": 6.1,
+      "review_reach": 28.4,
+      "framing": 4.3,
+      "merged_prs": 26,
+      "issue_ref_prs": 0,
+      "reviewed_others": 4,
+      "issues_authored_closed_in_window": 2
+    },
+    {
+      "rank": 77,
+      "login": "MichaelKutsch-ph",
+      "name": "Michi",
+      "impact": 12.9,
+      "outcomes": 0.0,
+      "review_reach": 36.9,
+      "framing": 0.0,
+      "merged_prs": 1,
+      "issue_ref_prs": 0,
+      "reviewed_others": 6,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 78,
+      "login": "mcoll-posthog",
+      "name": "Marce Coll",
+      "impact": 10.9,
+      "outcomes": 4.2,
+      "review_reach": 26.3,
+      "framing": 0.0,
+      "merged_prs": 11,
+      "issue_ref_prs": 0,
+      "reviewed_others": 3,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 79,
+      "login": "annaszell",
+      "name": "Anna Szell",
+      "impact": 10.8,
+      "outcomes": 10.9,
+      "review_reach": 17.0,
+      "framing": 2.1,
+      "merged_prs": 12,
+      "issue_ref_prs": 3,
+      "reviewed_others": 2,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 80,
+      "login": "edwinyjlim",
+      "name": "Edwin Lim",
+      "impact": 10.7,
+      "outcomes": 0.0,
+      "review_reach": 30.5,
+      "framing": 0.0,
+      "merged_prs": 1,
+      "issue_ref_prs": 0,
+      "reviewed_others": 4,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 81,
+      "login": "marco-g-pm",
+      "name": "Marco Gancitano",
+      "impact": 10.7,
+      "outcomes": 6.0,
+      "review_reach": 23.6,
+      "framing": 0.0,
+      "merged_prs": 10,
+      "issue_ref_prs": 0,
+      "reviewed_others": 3,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 82,
+      "login": "kyleswank",
+      "name": "Kyle Swank",
+      "impact": 10.3,
+      "outcomes": 7.7,
+      "review_reach": 13.1,
+      "framing": 10.6,
+      "merged_prs": 22,
+      "issue_ref_prs": 3,
+      "reviewed_others": 1,
+      "issues_authored_closed_in_window": 5
+    },
+    {
+      "rank": 83,
+      "login": "Z3r0Sum",
+      "name": "Stephen Schmidt",
+      "impact": 10.3,
+      "outcomes": 2.8,
+      "review_reach": 26.3,
+      "framing": 0.0,
+      "merged_prs": 7,
+      "issue_ref_prs": 0,
+      "reviewed_others": 3,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 84,
+      "login": "willwearing",
+      "name": "willwearing",
+      "impact": 9.1,
+      "outcomes": 11.4,
+      "review_reach": 13.1,
+      "framing": 0.0,
+      "merged_prs": 13,
+      "issue_ref_prs": 3,
+      "reviewed_others": 1,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 85,
+      "login": "joethreepwood",
+      "name": "Joe Martin",
+      "impact": 8.4,
+      "outcomes": 9.5,
+      "review_reach": 13.1,
+      "framing": 0.0,
+      "merged_prs": 28,
+      "issue_ref_prs": 0,
+      "reviewed_others": 1,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 86,
+      "login": "charlescook-ph",
+      "name": "Charles Cook",
+      "impact": 8.0,
+      "outcomes": 1.9,
+      "review_reach": 20.8,
+      "framing": 0.0,
+      "merged_prs": 1,
+      "issue_ref_prs": 0,
+      "reviewed_others": 2,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 87,
+      "login": "mjwarren3",
+      "name": "Mike Warren",
+      "impact": 7.0,
+      "outcomes": 6.1,
+      "review_reach": 13.1,
+      "framing": 0.0,
+      "merged_prs": 15,
+      "issue_ref_prs": 0,
+      "reviewed_others": 1,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 88,
+      "login": "andre347",
+      "name": "Andre de Vries",
+      "impact": 5.6,
+      "outcomes": 2.5,
+      "review_reach": 13.1,
+      "framing": 0.0,
+      "merged_prs": 4,
+      "issue_ref_prs": 0,
+      "reviewed_others": 1,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 89,
+      "login": "ryans-posthog",
+      "name": "ryans-posthog",
+      "impact": 5.3,
+      "outcomes": 1.9,
+      "review_reach": 13.1,
+      "framing": 0.0,
+      "merged_prs": 1,
+      "issue_ref_prs": 0,
+      "reviewed_others": 1,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 90,
+      "login": "timgl",
+      "name": "timgl",
+      "impact": 5.2,
+      "outcomes": 0.3,
+      "review_reach": 13.1,
+      "framing": 2.1,
+      "merged_prs": 2,
+      "issue_ref_prs": 0,
+      "reviewed_others": 1,
+      "issues_authored_closed_in_window": 1
+    },
+    {
+      "rank": 91,
+      "login": "ivanagas",
+      "name": "Ian Vanagas",
+      "impact": 4.8,
+      "outcomes": 0.5,
+      "review_reach": 13.1,
+      "framing": 0.0,
+      "merged_prs": 3,
+      "issue_ref_prs": 0,
+      "reviewed_others": 1,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 92,
+      "login": "HaynesPostHog",
+      "name": "HaynesPostHog",
+      "impact": 3.5,
+      "outcomes": 0.8,
+      "review_reach": 0.0,
+      "framing": 12.8,
+      "merged_prs": 7,
+      "issue_ref_prs": 0,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 6
+    },
+    {
+      "rank": 93,
+      "login": "seanpem",
+      "name": "Sean Mallia",
+      "impact": 3.0,
+      "outcomes": 7.5,
+      "review_reach": 0.0,
+      "framing": 0.0,
+      "merged_prs": 10,
+      "issue_ref_prs": 1,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 94,
+      "login": "raquelmsmith",
+      "name": "Raquel Smith",
+      "impact": 2.4,
+      "outcomes": 6.1,
+      "review_reach": 0.0,
+      "framing": 0.0,
+      "merged_prs": 13,
+      "issue_ref_prs": 0,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 95,
+      "login": "concernedsebster",
+      "name": "seb",
+      "impact": 1.4,
+      "outcomes": 3.4,
+      "review_reach": 0.0,
+      "framing": 0.0,
+      "merged_prs": 1,
+      "issue_ref_prs": 1,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 96,
+      "login": "sufi-ph",
+      "name": "Sufi S",
+      "impact": 1.1,
+      "outcomes": 2.8,
+      "review_reach": 0.0,
+      "framing": 0.0,
+      "merged_prs": 6,
+      "issue_ref_prs": 1,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 97,
+      "login": "consultingsultan",
+      "name": "Jonathan Lu",
+      "impact": 0.8,
+      "outcomes": 1.9,
+      "review_reach": 0.0,
+      "framing": 0.0,
+      "merged_prs": 1,
+      "issue_ref_prs": 0,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 98,
+      "login": "ella-c-ph",
+      "name": "ella-c",
+      "impact": 0.8,
+      "outcomes": 1.9,
+      "review_reach": 0.0,
+      "framing": 0.0,
+      "merged_prs": 1,
+      "issue_ref_prs": 0,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 99,
+      "login": "sachinr",
+      "name": "Sachin Ranchod",
+      "impact": 0.6,
+      "outcomes": 1.6,
+      "review_reach": 0.0,
+      "framing": 0.0,
+      "merged_prs": 1,
+      "issue_ref_prs": 1,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 100,
+      "login": "lukebaber-posthog",
+      "name": "Luke Baber",
+      "impact": 0.2,
+      "outcomes": 0.5,
+      "review_reach": 0.0,
+      "framing": 0.0,
+      "merged_prs": 3,
+      "issue_ref_prs": 0,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 101,
+      "login": "sarahxsanders",
+      "name": "Sarah Sanders",
+      "impact": 0.2,
+      "outcomes": 0.5,
+      "review_reach": 0.0,
+      "framing": 0.0,
+      "merged_prs": 3,
+      "issue_ref_prs": 0,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 102,
+      "login": "JakeRuth",
+      "name": "Jake Ruth",
+      "impact": 0.0,
+      "outcomes": 0.0,
+      "review_reach": 0.0,
+      "framing": 0.0,
+      "merged_prs": 1,
+      "issue_ref_prs": 0,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 103,
+      "login": "natalia-amorim",
+      "name": "Natalia Amorim",
+      "impact": 0.0,
+      "outcomes": 0.0,
+      "review_reach": 0.0,
+      "framing": 0.0,
+      "merged_prs": 1,
+      "issue_ref_prs": 0,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 104,
+      "login": "simfish85",
+      "name": "Simon Fisher",
+      "impact": 0.0,
+      "outcomes": 0.0,
+      "review_reach": 0.0,
+      "framing": 0.0,
+      "merged_prs": 1,
+      "issue_ref_prs": 0,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 0
+    },
+    {
+      "rank": 105,
+      "login": "sinthetix",
+      "name": "aly fulton",
+      "impact": 0.0,
+      "outcomes": 0.0,
+      "review_reach": 0.0,
+      "framing": 0.0,
+      "merged_prs": 1,
+      "issue_ref_prs": 0,
+      "reviewed_others": 0,
+      "issues_authored_closed_in_window": 0
+    }
+  ],
+  "volume_check": {
+    "note": "Highest raw PR authors in the window. Shown so volume is visible and not the rank.",
+    "top_authors": [
+      {
+        "login": "Gilbert09",
+        "merged_prs": 2214
+      },
+      {
+        "login": "posthog[bot]",
+        "merged_prs": 548
+      },
+      {
+        "login": "pauldambra",
+        "merged_prs": 517
+      },
+      {
+        "login": "andrewm4894",
+        "merged_prs": 356
+      },
+      {
+        "login": "sampennington",
+        "merged_prs": 344
+      },
+      {
+        "login": "rnegron",
+        "merged_prs": 286
+      },
+      {
+        "login": "webjunkie",
+        "merged_prs": 237
+      },
+      {
+        "login": "skoob13",
+        "merged_prs": 217
+      }
+    ]
+  }
+}

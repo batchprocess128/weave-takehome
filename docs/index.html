@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PostHog impact, last 90 days</title>
+  <style>
+    :root {
+      --bg: #0f0f11;
+      --card: #1a1a1f;
+      --card-2: #222228;
+      --line: #2e2e36;
+      --text: #f4f1ea;
+      --muted: #9a958a;
+      --dim: #6d685f;
+      --hog: #f54e00;
+      --blue: #7aa2ff;
+      --gold: #f5c542;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 13px/1.4 "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    }
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 18px 10px;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 650;
+      letter-spacing: -0.03em;
+    }
+    header h1 span { color: var(--hog); }
+    .lede { margin: 3px 0 0; color: var(--muted); max-width: 760px; }
+    .lede strong { color: var(--text); font-weight: 600; }
+    .meta { text-align: right; color: var(--dim); font-size: 11px; white-space: nowrap; }
+    .meta b { color: var(--muted); font-weight: 600; }
+    .five { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      text-align: left;
+      color: inherit;
+      font: inherit;
+      min-height: 136px;
+    }
+    .card:hover { border-color: #4a4a54; }
+    .card.active { border-color: var(--hog); box-shadow: 0 0 0 1px var(--hog); }
+    .card .rank { font-size: 10px; color: var(--hog); font-weight: 700; letter-spacing: 0.08em; }
+    .who { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+    .who img { width: 28px; height: 28px; border-radius: 50%; background: #333; }
+    .who .name { font-weight: 650; font-size: 13px; line-height: 1.15; }
+    .who .login { color: var(--dim); font-size: 11px; }
+    .why-sm {
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 46px;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+    .chip { background: var(--card-2); color: var(--muted); font-size: 10px; padding: 2px 6px; border-radius: 999px; }
+    .chip b { color: var(--text); font-weight: 650; }
+    .detail {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px 12px 8px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 14px 18px;
+      min-height: 0;
+    }
+    .detail h2 { margin: 0 0 4px; font-size: 16px; letter-spacing: -0.02em; }
+    .detail h2 a { color: inherit; text-decoration: none; }
+    .detail h2 a:hover { color: var(--hog); }
+    .why { color: var(--muted); margin: 0 0 7px; }
+    .bars { display: flex; flex-direction: column; gap: 6px; }
+    .bar-row { display: grid; grid-template-columns: 132px 1fr 36px; gap: 8px; align-items: center; }
+    .bar-row span { font-size: 11px; color: var(--muted); }
+    .track { background: #111114; height: 8px; border-radius: 99px; overflow: hidden; }
+    .fill { height: 100%; border-radius: 99px; }
+    .fill.o { background: var(--hog); }
+    .fill.m { background: var(--blue); }
+    .fill.f { background: var(--gold); }
+    .score { font-variant-numeric: tabular-nums; color: var(--text); font-weight: 650; font-size: 11px; }
+    .raw { color: var(--dim); font-size: 10.5px; line-height: 1.3; margin: 6px 0 0; }
+    .raw b { color: var(--muted); font-weight: 600; }
+    .col h3 {
+      margin: 0 0 4px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--dim);
+    }
+    .ev { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+    .ev a {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+      background: var(--card-2);
+      border-radius: 7px;
+      padding: 3px 6px;
+    }
+    .ev a:hover { outline: 1px solid var(--hog); }
+    .ev .t { font-weight: 600; font-size: 11.5px; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ev .w { color: var(--dim); font-size: 10px; line-height: 1.2; }
+    .formula {
+      background: #141418;
+      border-radius: 8px;
+      padding: 6px 8px;
+      color: var(--muted);
+      font-size: 10.5px;
+      margin-top: 6px;
+    }
+    .formula code { color: var(--text); font-size: 10.5px; display: block; margin: 2px 0; white-space: pre-wrap; }
+    footer { color: var(--dim); font-size: 11px; display: flex; justify-content: space-between; gap: 16px; }
+    footer a { color: var(--muted); }
+    .err { color: #ff7a7a; padding: 24px; }
+    @media (max-width: 980px) {
+      .five { grid-template-columns: 1fr 1fr; }
+      .detail { grid-template-columns: 1fr; }
+      header { flex-direction: column; align-items: flex-start; }
+      .meta { text-align: left; white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app">
+    <p class="lede">Loading precomputed analysis.</p>
+  </div>
+  <script>
+    function esc(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function chips(p) {
+      const o = p.pillars.outcomes, r = p.pillars.review_reach, f = p.pillars.framing;
+      return `
+        <div class="chips">
+          <span class="chip"><b>${o.issue_ref_prs}</b> issue-ref PRs</span>
+          <span class="chip"><b>${r.reviewed_others}</b> PRs reviewed</span>
+          <span class="chip"><b>${f.issues_authored_closed_in_window}</b> issues closed</span>
+        </div>`;
+    }
+
+    function card(p, active) {
+      return `
+        <button class="card ${active ? "active" : ""}" data-login="${esc(p.login)}" aria-pressed="${active}">
+          <div class="rank">#${p.rank}</div>
+          <div class="who">
+            <img src="${esc(p.avatar_url || "")}" alt="" />
+            <div>
+              <div class="name">${esc(p.name)}</div>
+              <div class="login">@${esc(p.login)}</div>
+            </div>
+          </div>
+          <div class="why-sm">${esc(p.why)}</div>
+          ${chips(p)}
+        </button>`;
+    }
+
+    function evList(items) {
+      if (!items || !items.length) return "";
+      return items.map(e => `
+        <li>
+          <a href="${esc(e.html_url)}" target="_blank" rel="noopener">
+            <div class="t">#${e.number} ${esc(e.title)}</div>
+            <div class="w">${esc(e.why)}</div>
+          </a>
+        </li>`).join("");
+    }
+
+    function detail(p, meta) {
+      const o = p.pillars.outcomes, r = p.pillars.review_reach, f = p.pillars.framing;
+      const F = meta.formulas || {};
+      const B = meta.normalization_bounds || {};
+      return `
+        <div>
+          <h2><a href="${esc(p.html_url)}" target="_blank" rel="noopener">${esc(p.name)} · impact ${p.impact}</a></h2>
+          <p class="why">${esc(p.why)}</p>
+          <div class="bars">
+            <div class="bar-row"><span>Outcomes ×0.40</span><div class="track"><div class="fill o" style="width:${o.score}%"></div></div><span class="score">${o.score}</span></div>
+            <div class="bar-row"><span>Review reach ×0.35</span><div class="track"><div class="fill m" style="width:${r.score}%"></div></div><span class="score">${r.score}</span></div>
+            <div class="bar-row"><span>Framing ×0.25</span><div class="track"><div class="fill f" style="width:${f.score}%"></div></div><span class="score">${f.score}</span></div>
+          </div>
+          <p class="raw">
+            <b>Outcomes raw ${o.raw}:</b>
+            ${o.issue_ref_prs} issue-ref PRs ×3
+            + ${o.bug_only_prs} bug-only PRs ×2
+            + 4×ln(1+${o.high_comment_prs} high-comment)
+            + ln(1+${o.other_prs} other).
+            ${o.merged_prs} merged total, ${o.stamphog_prs} stamphog excluded from terms.
+            High-comment bar is ≥${meta.high_comment_threshold} conversation comments.<br/>
+            <b>Review reach raw ${r.raw}:</b>
+            ln(1+${r.reviewed_others} other-author merged PRs matching reviewed-by)
+            + ln(1+${r.distinct_authors} distinct authors).
+            Not unblocking. Not review depth.<br/>
+            <b>Framing raw ${f.raw}:</b>
+            ${f.issues_authored_closed_in_window} issues they authored whose closed_at is inside ${meta.start} .. ${meta.end}.
+          </p>
+          <div class="formula">
+            <code>${esc(F.impact || "")}</code>
+            <code>pillar_norm = 100 × (raw - min) / (max - min)</code>
+            <code>bounds: outcomes ${B.outcomes?.min}..${B.outcomes?.max}; review ${B.review_reach?.min}..${B.review_reach?.max}; framing ${B.framing?.min}..${B.framing?.max}</code>
+            <div>Raw formulas are instantiated directly above. Full definitions and caveats are in the README.</div>
+          </div>
+        </div>
+        <div class="col">
+          <h3>Authored PRs (parser evidence)</h3>
+          <ul class="ev">${evList(p.evidence.prs) || "<li class='w'>No scored authored PRs.</li>"}</ul>
+          <h3 style="margin-top:6px">Review reach (reviewed-by hits)</h3>
+          <ul class="ev">${evList(p.evidence.reviews) || "<li class='w'>No other-author reviewed PRs.</li>"}</ul>
+          ${p.evidence.issues && p.evidence.issues.length ? `<h3 style="margin-top:6px">Issues authored and closed in window</h3><ul class="ev">${evList(p.evidence.issues)}</ul>` : ""}
+        </div>`;
+    }
+
+    function render(data, selected) {
+      const { meta, top5 } = data;
+      const p = top5.find(x => x.login === selected) || top5[0];
+      const vol = (data.volume_check && data.volume_check.top_authors || [])
+        .slice(0, 5)
+        .map(a => `${a.login} ${a.merged_prs}`)
+        .join(", ");
+      document.getElementById("app").innerHTML = `
+        <header>
+          <div>
+            <h1>Who <span>moved</span> PostHog</h1>
+            <p class="lede">
+              <strong>Impact, as scored here, is leverage visible in GitHub on PostHog/posthog.</strong>
+              Not LOC, commits, files changed, or raw PR volume.
+              ${meta.pr_count.toLocaleString()} merged PRs and ${meta.issue_count.toLocaleString()} issues,
+              ${meta.start} to ${meta.end}. ${meta.staff_scored} affiliated contributors scored.
+            </p>
+          </div>
+          <div class="meta">
+            <div><b>${meta.start}</b> to <b>${meta.end}</b></div>
+            <div>${meta.staff_considered} affiliated, ${meta.staff_scored} scored</div>
+            <div>fetched ${new Date(meta.fetched_at).toUTCString()}</div>
+          </div>
+        </header>
+        <div class="five">${top5.map(x => card(x, x.login === p.login)).join("")}</div>
+        <section class="detail">${detail(p, meta)}</section>
+        <footer>
+          <div>
+            ${esc(meta.population)}
+            Volume check (not the rank): ${esc(vol)}.
+            Other PostHog repos, Linear, Slack, and production metrics are out of scope.
+          </div>
+          <div><a href="https://github.com/PostHog/posthog" target="_blank" rel="noopener">PostHog/posthog</a></div>
+        </footer>`;
+      document.querySelectorAll(".card").forEach(btn => {
+        btn.addEventListener("click", () => render(data, btn.dataset.login));
+      });
+    }
+
+    const dataUrl = new URL("data.json", document.baseURI);
+    fetch(dataUrl)
+      .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(data => render(data, data.top5[0].login))
+      .catch(err => {
+        document.getElementById("app").innerHTML =
+          `<p class="err">Could not load data.json (${err}). Serve this folder over HTTP.</p>`;
+      });
+  </script>
+</body>
+</html>
