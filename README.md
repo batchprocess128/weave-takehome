@@ -52,9 +52,30 @@ python3 -m http.server 8080 --directory docs
 ```
 scripts/fetch.py       # GitHub search + profile lookup → data/raw/
 scripts/analyze.py     # impact model → docs/data.json
+scripts/load_db.py     # optional: data/raw/ → local Postgres
+scripts/pg.py          # optional: SQL → pandas DataFrame
 docs/index.html        # one-page dashboard (no build step)
 docs/data.json         # precomputed analysis (dashboard reads this)
 data/raw/              # fetched GitHub payloads (not required at runtime)
+db/                    # schema, example queries, tutorial (optional track)
+docker-compose.yml     # local Postgres 16
+pyproject.toml         # uv deps (optional db + notebook groups)
+```
+
+## Local Postgres (optional tutorial)
+
+The dashboard does not need a database. This track loads the same `data/raw/` dumps into Postgres so you can join PRs, labels, reviewers, and profiles with SQL.
+
+Walkthrough, schema diagram, and example queries: **[db/README.md](db/README.md)**.
+
+Dependencies are managed with [uv](https://docs.astral.sh/uv/). The take-home scripts (`fetch.py`, `analyze.py`) stay stdlib-only; `uv sync` only installs the optional `db` and `notebook` groups.
+
+```bash
+docker compose up -d
+uv sync
+uv run python scripts/load_db.py
+docker exec -i weave-postgres psql -U weave -d weave < db/queries.sql
+uv run jupyter lab    # notebook: pick kernel "Python (weave)" after one-time setup in db/README.md
 ```
 
 ## Hosting

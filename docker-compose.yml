@@ -1,0 +1,23 @@
+# Local Postgres for the cached GitHub dumps in data/raw/.
+# First boot only: docker compose up -d
+# Reload data:     python3 scripts/load_db.py
+services:
+  postgres:
+    image: postgres:16
+    container_name: weave-postgres
+    environment:
+      POSTGRES_USER: weave
+      POSTGRES_PASSWORD: weave
+      POSTGRES_DB: weave
+    ports:
+      - "5432:5432"
+    volumes:
+      - weave_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U weave -d weave"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  weave_pg_data:
