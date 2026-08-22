@@ -5,7 +5,9 @@ description = "PostHog engineering impact dashboard and optional Postgres tutori
 readme = "README.md"
 requires-python = ">=3.12"
 # fetch.py and analyze.py stay stdlib-only; optional groups below.
-dependencies = []
+dependencies = [
+    "pydantic-ai>=2.33.0",
+]
 
 [dependency-groups]
 db = [
