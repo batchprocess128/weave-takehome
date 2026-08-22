@@ -33,7 +33,7 @@ Optional packages live in `pyproject.toml` dependency groups — not in the take
 | Group | Packages | Used for |
 |---|---|---|
 | `db` | psycopg, pandas | `load_db.py`, `pg.py`, SQL → DataFrame |
-| `notebook` | jupyterlab, ipykernel, scikit-learn | `QueryWeaveData.ipynb` exploration |
+| `notebook` | jupyterlab, ipykernel, scikit-learn | `PostHogDataEDA.ipynb` exploration |
 
 ```bash
 uv sync                              # install db + notebook groups (default)
